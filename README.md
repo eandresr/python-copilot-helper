@@ -7,7 +7,7 @@ Helper utilities for interacting with GitHub Copilot via scripts.
 ## `copilot_chat.py` — Ask Copilot from the command line
 
 Send a question to the GitHub Copilot Chat API directly from your terminal,
-with automatic token management so you only need to authorise once.
+with automatic token management so you only need to authorize once.
 
 ### Features
 
@@ -16,7 +16,7 @@ with automatic token management so you only need to authorise once.
 | **argparse** | Uses `-q`/`--question` key-value argument (or interactive prompt) |
 | **Env-var token storage** | Copilot session token stored in `COPILOT_SESSION_TOKEN`; GitHub OAuth token in `COPILOT_GH_TOKEN` |
 | **Automatic validation** | On every run the script checks whether the stored session token is still active |
-| **Seamless refresh** | If the session token is expired the script uses the saved GitHub OAuth token to obtain a fresh one — no re-authorisation needed |
+| **Seamless refresh** | If the session token is expired the script uses the saved GitHub OAuth token to obtain a fresh one — no re-authorization needed |
 | **One-time Device Flow** | Only runs the full GitHub Device Flow when no credentials are found at all |
 
 ---
@@ -60,7 +60,7 @@ The script follows this sequence on every run:
    ├─ YES → exchange GitHub OAuth token for a fresh session token ✓
    └─ NO  → go to step 3
 
-3. Run full GitHub Device Flow (one-time browser authorisation)
+3. Run full GitHub Device Flow (one-time browser authorization)
    → save GitHub OAuth token to COPILOT_GH_TOKEN env var
      and to ~/.copilot_helper (chmod 600)
    → obtain Copilot session token ✓
@@ -95,7 +95,7 @@ export COPILOT_GH_TOKEN="gho_xxxxxxxxxxxxxxxxxxxx"
 {"gh_token": "gho_xxxxxxxxxxxxxxxxxxxx"}
 ```
 
-Delete it to force a fresh Device Flow authorisation.
+Delete it to force a fresh Device Flow authorization.
 
 ---
 
@@ -103,17 +103,17 @@ Delete it to force a fresh Device Flow authorisation.
 
 ```
 [*] No stored credentials found. Starting full authentication...
-[*] Starting GitHub device authorisation flow...
+[*] Starting GitHub device authorization flow...
 
 ============================================================
-=================== AUTHORISATION REQUIRED =================
+=================== AUTHORIZATION REQUIRED =================
   1. Open your browser and go to: https://github.com/login/device
   2. Enter this exact code:        ABCD-1234
 ============================================================
 
 Waiting for browser confirmation..........
 
-[+] GitHub authorisation successful!
+[+] GitHub authorization successful!
 [+] GitHub token saved to /home/user/.copilot_helper
 [*] Exchanging credentials for a Copilot session token...
 [+] Copilot session token obtained successfully.

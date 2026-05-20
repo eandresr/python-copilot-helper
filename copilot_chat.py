@@ -56,7 +56,7 @@ COPILOT_CLIENT_HEADERS = {
 # ---------------------------------------------------------------------------
 
 
-def _load_saved_gh_token() -> str | None:
+def _load_saved_github_token() -> str | None:
     """Return the GitHub OAuth token saved in CREDENTIAL_FILE, or None."""
     if not os.path.exists(CREDENTIAL_FILE):
         return None
@@ -68,7 +68,7 @@ def _load_saved_gh_token() -> str | None:
         return None
 
 
-def _save_gh_token(gh_token: str) -> None:
+def _save_github_token(gh_token: str) -> None:
     """Persist the GitHub OAuth token to CREDENTIAL_FILE (chmod 600)."""
     try:
         with open(CREDENTIAL_FILE, "w", encoding="utf-8") as fh:
@@ -91,7 +91,7 @@ def _run_device_flow() -> str:
     Returns the GitHub OAuth access token on success.
     Exits the process on unrecoverable errors.
     """
-    print("[*] Starting GitHub device authorisation flow...")
+    print("[*] Starting GitHub device authorization flow...")
 
     response = requests.post(
         DEVICE_CODE_URL,
@@ -110,7 +110,7 @@ def _run_device_flow() -> str:
     interval = device_data.get("interval", 5)
 
     print("\n" + "=" * 60)
-    print(" AUTHORISATION REQUIRED ".center(60, "="))
+    print(" AUTHORIZATION REQUIRED ".center(60, "="))
     print(f"  1. Open your browser and go to: {verification_uri}")
     print(f"  2. Enter this exact code:        {user_code}")
     print("=" * 60 + "\n")
@@ -132,7 +132,7 @@ def _run_device_flow() -> str:
         ).json()
 
         if "access_token" in poll_resp:
-            print("\n\n[+] GitHub authorisation successful!")
+            print("\n\n[+] GitHub authorization successful!")
             return poll_resp["access_token"]
 
         error = poll_resp.get("error")
@@ -142,7 +142,7 @@ def _run_device_flow() -> str:
             interval += 5
             continue
         if error == "expired_token":
-            print("\n\n[-] The authorisation window expired. Please re-run the script.")
+            print("\n\n[-] The authorization window expired. Please re-run the script.")
             sys.exit(1)
 
         print(f"\n\n[-] Authentication error: {error}")
@@ -225,7 +225,7 @@ def get_valid_session_token() -> str:
         print("[!] Session token is expired or invalid. Refreshing...")
 
     # --- Step 2: refresh using stored GitHub OAuth token ---
-    gh_token = os.environ.get("COPILOT_GH_TOKEN") or _load_saved_gh_token()
+    gh_token = os.environ.get("COPILOT_GH_TOKEN") or _load_saved_github_token()
     if gh_token:
         print("[*] Found GitHub OAuth token. Obtaining fresh session token...")
         session_token = _fetch_copilot_session_token(gh_token)
@@ -236,7 +236,7 @@ def get_valid_session_token() -> str:
     print("[*] No stored credentials found. Starting full authentication...")
     gh_token = _run_device_flow()
     os.environ["COPILOT_GH_TOKEN"] = gh_token
-    _save_gh_token(gh_token)
+    _save_github_token(gh_token)
 
     session_token = _fetch_copilot_session_token(gh_token)
     os.environ["COPILOT_SESSION_TOKEN"] = session_token
